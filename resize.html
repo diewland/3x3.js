@@ -1,0 +1,44 @@
+<style>
+  canvas {
+    border: 1px solid #000;
+  }
+</style>
+
+<canvas id='canvas'></canvas>
+
+<script>
+
+  // TODO https://stackoverflow.com/questions/195262/can-i-turn-off-antialiasing-on-an-html-canvas-element
+
+  let sampling = 30;
+
+  // let img_src = './samples/pikachu.png';
+  // let img_src = './samples/bulbasaur.png';
+  let img_src = './samples/charmander.png';
+  // let img_src = './samples/squirtle.png';
+
+  let img = new Image();
+  img.onload = function() {
+
+    let thiz = this;
+    let w = this.width;
+    let h = this.height;
+
+    // var canvas = document.createElement('canvas'),
+    let canvas = document.getElementById('canvas'),
+    ctx = canvas.getContext('2d');
+
+    canvas.width = sampling; //w;
+    canvas.height= sampling; //h;
+
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
+
+    ctx.drawImage(this, 0, 0, sampling, sampling);
+
+  };
+
+  img.src = img_src;
+
+</script>
