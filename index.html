@@ -1,0 +1,101 @@
+<style>
+  canvas {
+    border: 1px solid #000;
+  }
+  img {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #000;
+  }
+</style>
+
+<canvas id='canvas'></canvas>
+<hr>
+<canvas id='cv11'></canvas><canvas id='cv12'></canvas><canvas id='cv13'></canvas><br>
+<canvas id='cv21'></canvas><canvas id='cv22'></canvas><canvas id='cv23'></canvas><br>
+<canvas id='cv31'></canvas><canvas id='cv32'></canvas><canvas id='cv33'></canvas><br>
+<hr>
+<img id='im11'><img id='im12'><img id='im13'><br>
+<img id='im21'><img id='im22'><img id='im23'><br>
+<img id='im31'><img id='im32'><img id='im33'><br>
+
+<script src='https://lokeshdhakar.com/projects/color-thief/js/color-thief.min.js'></script>
+<script>
+
+  let pixel_num = 3;
+  // let img_src = './samples/pikachu.png';
+  let img_src = './samples/bulbasaur.png';
+  // let img_src = './samples/charmander.png';
+  // let img_src = './samples/squirtle.png';
+
+  let colorThief = new ColorThief();
+
+  var rgb2hex = function (rgb) { 
+    var hex = Number(rgb).toString(16);
+    if (hex.length < 2) {
+      hex = "0" + hex;
+    }
+    return hex;
+  };
+
+  let img = new Image();
+  img.onload = function() {
+
+    let thiz = this;
+    let w = this.width;
+    let h = this.height;
+
+    // make square
+    if(w != h){
+      // TODO
+    }
+
+    let each_w = parseInt(w/pixel_num);
+
+    // split to 3x3
+    // find color for each area
+    // combine to 3x3 pixels image
+    // preview
+
+    // var canvas = document.createElement('canvas'),
+    let canvas = document.getElementById('canvas'),
+    ctx = canvas.getContext('2d');
+    canvas.width = w;
+    canvas.height= h;
+    ctx.drawImage(this, 0, 0, w, h);
+
+    for(let row=1; row<=pixel_num; row++){
+      for(let col=1; col<=pixel_num; col++){
+
+        let cv = document.getElementById(`cv${row}${col}`);
+        ctx = cv.getContext('2d');
+        cv.width = each_w;
+        cv.height= each_w;
+        let x = (col-1) * each_w;
+        let y = (row-1) * each_w;
+        ctx.drawImage(thiz, x, y, each_w, each_w, 0, 0, each_w, each_w);
+
+        let image = new Image();
+        image.onload = function(){
+          let color_s = null;
+          try {
+            color = colorThief.getColor(this);
+            color_s = color.map((v) => rgb2hex(v)).join('');
+          }
+          catch(err){
+            color_s = 'ffffff';
+          }
+
+          let cur = document.getElementById(`im${row}${col}`);
+          cur.style.backgroundColor = `#${color_s}`;
+
+        };
+        image.src = cv.toDataURL("image/png");// .split(',')[1];
+      }
+    }
+
+  };
+
+  img.src = img_src;
+
+</script>
